@@ -4,19 +4,68 @@ import { Teaser } from './components/Teaser';
 import { Section } from './components/Section';
 import { BibTeX } from './components/BibTeX';
 import { ABSTRACT } from './constants';
-import { Star, Clock, Zap, Target, ArrowRight } from 'lucide-react';
+import { Sparkles, Clock, Zap, Target, ArrowRight } from 'lucide-react';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen w-full bg-slate-50">
-      {/* Background decoration */}
+    <div className="min-h-screen w-full bg-slate-50 relative overflow-hidden">
+      {/* Flowing wave background - inspired by temporal flow */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Top flowing waves */}
+        <div className="absolute top-0 left-0 w-full h-[600px] opacity-30">
+          <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 1440 600" preserveAspectRatio="none">
+            <path d="M0,200 C240,100 480,300 720,200 C960,100 1200,300 1440,200 L1440,0 L0,0 Z" fill="url(#grad1)" opacity="0.3"/>
+            <path d="M0,300 C240,400 480,200 720,300 C960,400 1200,200 1440,300 L1440,0 L0,0 Z" fill="url(#grad2)" opacity="0.2"/>
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style={{stopColor: '#818cf8', stopOpacity: 0.3}} />
+                <stop offset="100%" style={{stopColor: '#f59e0b', stopOpacity: 0.3}} />
+              </linearGradient>
+              <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style={{stopColor: '#fbbf24', stopOpacity: 0.2}} />
+                <stop offset="100%" style={{stopColor: '#818cf8', stopOpacity: 0.2}} />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        
+        {/* Subtle gradient orbs */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-200/20 rounded-full blur-[100px]" />
         <div className="absolute top-[20%] right-0 w-[600px] h-[600px] bg-amber-100/40 rounded-full blur-[100px]" />
+        
+        {/* Bottom flowing waves */}
+        <div className="absolute bottom-0 left-0 w-full h-[400px] opacity-20">
+          <svg className="absolute bottom-0 left-0 w-full h-full" viewBox="0 0 1440 400" preserveAspectRatio="none">
+            <path d="M0,150 C360,250 720,50 1080,150 C1200,180 1320,120 1440,150 L1440,400 L0,400 Z" fill="url(#grad3)" opacity="0.4"/>
+            <defs>
+              <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style={{stopColor: '#60a5fa', stopOpacity: 0.2}} />
+                <stop offset="100%" style={{stopColor: '#c084fc', stopOpacity: 0.2}} />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        
       </div>
 
       {/* Hero & Teaser Area */}
       <div className="relative z-10">
+        {/* Clock positioned behind header - LEFT side */}
+        <div className="absolute left-0 w-full flex justify-start pointer-events-none" style={{top: '-4px'}}>
+          <img 
+            src="/clock.gif" 
+            alt="" 
+            className="w-[500px] h-auto object-contain opacity-25 mix-blend-multiply"
+          />
+        </div>
+        {/* Clock positioned behind header - RIGHT side */}
+        <div className="absolute right-0 w-full flex justify-end pointer-events-none" style={{top: '-4px'}}>
+          <img 
+            src="/clock.gif" 
+            alt="" 
+            className="w-[500px] h-auto object-contain opacity-25 mix-blend-multiply"
+          />
+        </div>
         <Header />
         <Teaser />
       </div>
@@ -31,54 +80,69 @@ const App: React.FC = () => {
       {/* Overview / Method Section */}
       <Section title="Overview: The TARA Recipe" grayBackground className="relative z-10">
         <div className="mb-12 text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
-            <Star size={16} className="fill-amber-800" />
+          <div className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 text-amber-900 px-5 py-2.5 rounded-full text-sm font-semibold mb-6 shadow-sm">
+            <Sparkles size={18} className="text-amber-500 fill-amber-400" />
             <span>TARA means "Star" in Sanskrit</span>
+            <Clock size={18} className="text-indigo-500" />
           </div>
           <p className="text-slate-600 text-lg">
-            Just as the North Star guides travelers, <span className="font-bold text-slate-900">TARA</span> guides Multimodal LLMs to understand time without ever seeing a video during training.
+            Just as the North Star guides travelers through <span className="font-bold text-indigo-600">time</span>, <span className="font-bold text-slate-900">TARA</span> guides Multimodal LLMs to understand <span className="font-bold text-indigo-600">temporal dynamics</span> without ever seeing a video during training.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
+          <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100 hover:shadow-xl transition-shadow duration-300">
             <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <Zap className="text-indigo-600" />
+              <Clock className="text-indigo-600" />
               The Challenge
             </h3>
             <p className="text-slate-600 mb-4">
-              Most video-text models suffer from <strong>static bias</strong>. They focus on objects and scenes but ignore temporal dynamics. For example, they struggle to distinguish "opening a door" from "closing a door".
+              Most video-text models suffer from <strong>static bias</strong>. They focus on objects and scenes but ignore <strong className="text-indigo-600">temporal dynamics</strong>. For example, they struggle to distinguish "opening a door" from "closing a door" — actions that differ only in <strong className="text-amber-600">time direction</strong>.
             </p>
           </div>
-          <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
+          <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100 hover:shadow-xl transition-shadow duration-300">
              <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <Target className="text-indigo-600" />
+              <Target className="text-amber-600" />
               The Solution
             </h3>
             <p className="text-slate-600 mb-4">
-              TARA adapts an MLLM using <strong>text-only contrastive learning</strong>. We engineer "time-aware" text triplets where positive sentences share actions with the anchor, but hard negatives describe temporally opposite actions (e.g., antonym verbs).
+              TARA adapts an MLLM using <strong>text-only contrastive learning</strong>. We engineer <strong className="text-indigo-600">"time-aware"</strong> text triplets where positive sentences share actions with the anchor, but hard negatives describe <strong className="text-amber-600">temporally opposite</strong> actions (e.g., antonym verbs).
             </p>
           </div>
         </div>
 
         <div className="bg-slate-900 text-white p-8 rounded-2xl shadow-xl overflow-hidden relative">
            <div className="absolute top-0 right-0 p-32 bg-indigo-500/20 rounded-full blur-3xl"></div>
-           <h3 className="text-xl font-bold mb-6 text-center">How TARA Works</h3>
+           <div className="absolute top-0 left-0 p-32 bg-amber-500/10 rounded-full blur-3xl"></div>
+           <h3 className="text-xl font-bold mb-6 text-center flex items-center justify-center gap-2">
+             <Clock className="text-amber-400" size={24} />
+             How TARA Works
+             <Sparkles className="text-amber-400" size={24} />
+           </h3>
            <div className="grid md:grid-cols-3 gap-6 relative z-10">
-              <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 backdrop-blur-sm">
-                <div className="text-indigo-400 font-mono text-xs mb-2">Step 1</div>
+              <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 backdrop-blur-sm hover:border-indigo-500/50 transition-all duration-300">
+                <div className="text-indigo-400 font-mono text-xs mb-2 flex items-center gap-1">
+                  <Clock size={12} />
+                  Step 1
+                </div>
                 <h4 className="font-bold mb-2">Mine Chiral Actions</h4>
-                <p className="text-slate-400 text-sm">Extract captions with reversible actions (e.g., "folding paper") from Ego4D using LLMs.</p>
+                <p className="text-slate-400 text-sm">Extract captions with <span className="text-amber-300">reversible actions</span> (e.g., "folding paper") from Ego4D using LLMs.</p>
               </div>
-               <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 backdrop-blur-sm">
-                <div className="text-indigo-400 font-mono text-xs mb-2">Step 2</div>
+               <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 backdrop-blur-sm hover:border-amber-500/50 transition-all duration-300">
+                <div className="text-amber-400 font-mono text-xs mb-2 flex items-center gap-1">
+                  <ArrowRight size={12} />
+                  Step 2
+                </div>
                 <h4 className="font-bold mb-2">Generate Negatives</h4>
-                <p className="text-slate-400 text-sm">Use an LLM to generate the "temporal opposite" sentence (e.g., "unfolding paper") as a hard negative.</p>
+                <p className="text-slate-400 text-sm">Use an LLM to generate the <span className="text-indigo-300">"temporal opposite"</span> sentence (e.g., "unfolding paper") as a hard negative.</p>
               </div>
-               <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 backdrop-blur-sm">
-                <div className="text-indigo-400 font-mono text-xs mb-2">Step 3</div>
+               <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 backdrop-blur-sm hover:border-violet-500/50 transition-all duration-300">
+                <div className="text-violet-400 font-mono text-xs mb-2 flex items-center gap-1">
+                  <Zap size={12} />
+                  Step 3
+                </div>
                 <h4 className="font-bold mb-2">Contrastive Tuning</h4>
-                <p className="text-slate-400 text-sm">Fine-tune the MLLM on these text triplets for just 1 hour to align the embedding space.</p>
+                <p className="text-slate-400 text-sm">Fine-tune the MLLM on these text triplets for just <span className="text-amber-300">1 hour</span> to align the embedding space.</p>
               </div>
            </div>
         </div>
