@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-// Placeholder URL - In production, this would be the actual Figure 1 from the paper
-const PLACEHOLDER_URL = "https://picsum.photos/1200/500"; 
+// Figure 1 from the paper
+const FIGURE_1_URL = "/arch.png"; 
 
 export const Teaser: React.FC = () => {
   return (
@@ -15,13 +15,10 @@ export const Teaser: React.FC = () => {
       >
         <div className="relative aspect-[2/1] w-full bg-slate-50 overflow-hidden rounded-xl">
              <img 
-                src={PLACEHOLDER_URL} 
+                src={FIGURE_1_URL} 
                 alt="TARA Architecture Overview" 
                 className="w-full h-full object-contain"
             />
-             <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 hover:opacity-100 transition-opacity bg-black/5">
-                <span className="bg-black/75 text-white px-4 py-2 rounded text-sm font-medium backdrop-blur-sm">Replace with Figure 1 from paper</span>
-            </div>
         </div>
         
         <div className="p-4 sm:p-6 bg-white">
