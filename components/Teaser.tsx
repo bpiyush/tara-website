@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import archImage from '/arch.png';
 
 // Figure 1 from the paper
-const FIGURE_1_URL = "/arch.png"; 
+const FIGURE_1_URL = archImage; 
 
 export const Teaser: React.FC = () => {
   return (
