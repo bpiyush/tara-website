@@ -21,8 +21,8 @@ export const AFFILIATIONS = [
 
 export const LINKS: LinkData[] = [
   { label: "arXiv Paper", url: "#", icon: "pdf" }, // Replace with actual arXiv link when available
-  { label: "Code", url: "#", icon: "github" },
-  { label: "Data", url: "#", icon: "data" },
+  { label: "Code", url: "https://github.com/bpiyush/TARA", icon: "github" },
+  { label: "Dataset", url: "https://huggingface.co/datasets/bpiyush/chirality-in-action", icon: "data" },
 ];
 
 export const ABSTRACT = `
