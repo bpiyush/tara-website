@@ -149,116 +149,169 @@ const App: React.FC = () => {
       </Section>
 
       {/* Results Section */}
-      <Section title="State-of-the-Art Results" className="relative z-10">
-        <p className="text-center text-slate-600 max-w-3xl mx-auto mb-12">
+      <Section title="Key Results" className="relative z-10">
+        <p className="text-center text-slate-600 max-w-3xl mx-auto mb-16">
           TARA achieves state-of-the-art performance on multiple benchmarks without training on any video data.
         </p>
         
-        {/* Table 2: CiA Retrieval */}
-        <div className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-indigo-100 p-2 rounded-lg"><Clock className="text-indigo-600 w-5 h-5"/></div>
-            <h3 className="text-xl font-bold text-slate-900">Time-Awareness: CiA-Retrieval Benchmark</h3>
+        {/* 1. TARA is Time-Aware */}
+        <div className="mb-20">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-gradient-to-br from-indigo-500 to-violet-600 p-2.5 rounded-xl shadow-lg">
+              <Clock className="text-white w-6 h-6"/>
+            </div>
+            <h3 className="text-2xl font-bold text-slate-900">1. TARA is Time-Aware</h3>
           </div>
-          <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
-            <table className="min-w-full text-sm">
-              <thead className="bg-slate-50 border-b border-slate-200">
-                <tr>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-900">Model</th>
-                  <th className="px-4 py-3 text-center font-semibold text-slate-900 border-l border-slate-100">SSv2 Chiral (mAP)</th>
-                  <th className="px-4 py-3 text-center font-semibold text-slate-900 border-l border-slate-100">EPIC Chiral (mAP)</th>
-                  <th className="px-4 py-3 text-center font-semibold text-slate-900 border-l border-slate-100">Charades Chiral (mAP)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                <tr>
-                  <td className="px-4 py-3 font-medium text-slate-600">Qwen2VL-7B</td>
-                  <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">60.2</td>
-                  <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">53.7</td>
-                  <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">55.9</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-3 font-medium text-slate-600">CaRe</td>
-                  <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">66.4</td>
-                  <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">62.3</td>
-                  <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">56.1</td>
-                </tr>
-                 <tr>
-                  <td className="px-4 py-3 font-medium text-slate-600">Qwen2.5VL-ArrowRL</td>
-                  <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">67.5</td>
-                  <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">55.7</td>
-                  <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">57.1</td>
-                </tr>
-                <tr className="bg-indigo-50/50">
-                  <td className="px-4 py-3 font-bold text-indigo-900 flex items-center gap-2">
-                    TARA (Ours) <span className="text-[10px] bg-indigo-200 px-1.5 py-0.5 rounded text-indigo-800">SOTA</span>
-                  </td>
-                  <td className="px-4 py-3 text-center font-bold text-indigo-700 border-l border-indigo-100">85.1</td>
-                  <td className="px-4 py-3 text-center font-bold text-indigo-700 border-l border-indigo-100">77.3</td>
-                  <td className="px-4 py-3 text-center font-bold text-indigo-700 border-l border-indigo-100">71.8</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p className="text-xs text-slate-500 mt-2">
-            Table 2 (Condensed): Performance on Chiral splits (t→v). TARA significantly outperforms baselines trained on video data.
+          <p className="text-slate-600 text-lg mb-8 ml-12 leading-relaxed">
+            <strong className="text-indigo-600">Key Takeaway:</strong> TARA produces time-sensitive video-text embeddings as demonstrated by strong zero-shot performance on two benchmarks: our proposed CiA-Retrieval and Reversed in Time.
           </p>
+          
+          {/* CiA-Retrieval Table */}
+          <div className="mb-8 ml-12">
+            <h4 className="text-lg font-semibold text-slate-800 mb-4">CiA-Retrieval Benchmark</h4>
+            <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
+              <table className="min-w-full text-sm">
+                <thead className="bg-slate-50 border-b border-slate-200">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold text-slate-900">Model</th>
+                    <th className="px-4 py-3 text-center font-semibold text-slate-900 border-l border-slate-100">SSv2 Chiral (mAP)</th>
+                    <th className="px-4 py-3 text-center font-semibold text-slate-900 border-l border-slate-100">EPIC Chiral (mAP)</th>
+                    <th className="px-4 py-3 text-center font-semibold text-slate-900 border-l border-slate-100">Charades Chiral (mAP)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-slate-600">Qwen2VL-7B</td>
+                    <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">60.2</td>
+                    <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">53.7</td>
+                    <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">55.9</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-slate-600">CaRe</td>
+                    <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">66.4</td>
+                    <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">62.3</td>
+                    <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">56.1</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-slate-600">Qwen2.5VL-ArrowRL</td>
+                    <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">67.5</td>
+                    <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">55.7</td>
+                    <td className="px-4 py-3 text-center text-slate-600 border-l border-slate-50">57.1</td>
+                  </tr>
+                  <tr className="bg-indigo-50/50">
+                    <td className="px-4 py-3 font-bold text-indigo-900 flex items-center gap-2">
+                      TARA (Ours) <span className="text-[10px] bg-indigo-200 px-1.5 py-0.5 rounded text-indigo-800">SOTA</span>
+                    </td>
+                    <td className="px-4 py-3 text-center font-bold text-indigo-700 border-l border-indigo-100">85.1</td>
+                    <td className="px-4 py-3 text-center font-bold text-indigo-700 border-l border-indigo-100">77.3</td>
+                    <td className="px-4 py-3 text-center font-bold text-indigo-700 border-l border-indigo-100">71.8</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Reversed in Time Table */}
+          <div className="ml-12">
+            <h4 className="text-lg font-semibold text-slate-800 mb-4">Reversed in Time Benchmark</h4>
+            <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white max-w-md">
+              <table className="min-w-full text-sm">
+                <thead className="bg-slate-50 border-b border-slate-200">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold text-slate-900">Method</th>
+                    <th className="px-4 py-3 text-center font-semibold text-slate-900">T2V Accuracy</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  <tr><td className="px-4 py-3 text-slate-600">InternVideo2-1B</td><td className="px-4 py-3 text-center text-slate-600">50.0</td></tr>
+                  <tr><td className="px-4 py-3 text-slate-600">Qwen2VL</td><td className="px-4 py-3 text-center text-slate-600">56.3</td></tr>
+                  <tr><td className="px-4 py-3 text-slate-600">Tarsier (Base)</td><td className="px-4 py-3 text-center text-slate-600">64.9</td></tr>
+                  <tr className="bg-indigo-50/50">
+                    <td className="px-4 py-3 font-bold text-indigo-900">TARA (Ours)</td>
+                    <td className="px-4 py-3 text-center font-bold text-indigo-700">71.6</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12">
-            {/* Table 3: RTime */}
-            <div>
-               <div className="flex items-center gap-3 mb-6">
-                <div className="bg-indigo-100 p-2 rounded-lg"><ArrowRight className="text-indigo-600 w-5 h-5"/></div>
-                <h3 className="text-xl font-bold text-slate-900">ReversedInTime</h3>
-              </div>
-              <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
-                <table className="min-w-full text-sm">
-                  <thead className="bg-slate-50 border-b border-slate-200">
-                    <tr>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-900">Method</th>
-                      <th className="px-4 py-3 text-center font-semibold text-slate-900">T2V Accuracy</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    <tr><td className="px-4 py-3 text-slate-600">InternVideo2-1B</td><td className="px-4 py-3 text-center text-slate-600">50.0</td></tr>
-                    <tr><td className="px-4 py-3 text-slate-600">Qwen2VL</td><td className="px-4 py-3 text-center text-slate-600">56.3</td></tr>
-                    <tr><td className="px-4 py-3 text-slate-600">Tarsier (Base)</td><td className="px-4 py-3 text-center text-slate-600">64.9</td></tr>
-                     <tr className="bg-indigo-50/50">
-                      <td className="px-4 py-3 font-bold text-indigo-900">TARA (Ours)</td>
-                      <td className="px-4 py-3 text-center font-bold text-indigo-700">71.6</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+        {/* 2. Negation Understanding */}
+        <div className="mb-20">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-gradient-to-br from-amber-500 to-orange-600 p-2.5 rounded-xl shadow-lg">
+              <Zap className="text-white w-6 h-6"/>
             </div>
+            <h3 className="text-2xl font-bold text-slate-900">2. Negation Understanding</h3>
+          </div>
+          <p className="text-slate-600 text-lg mb-8 ml-12 leading-relaxed">
+            <strong className="text-amber-600">Key Takeaway:</strong> TARA shows strong negation understanding on NegBench even outperforming fine-tuned models.
+          </p>
+          
+          <div className="ml-12">
+            <h4 className="text-lg font-semibold text-slate-800 mb-4">NegBench (MSR-VTT)</h4>
+            <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white max-w-md">
+              <table className="min-w-full text-sm">
+                <thead className="bg-slate-50 border-b border-slate-200">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold text-slate-900">Model</th>
+                    <th className="px-4 py-3 text-center font-semibold text-slate-900">R@5</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  <tr><td className="px-4 py-3 text-slate-600">CLIP</td><td className="px-4 py-3 text-center text-slate-600">50.6</td></tr>
+                  <tr><td className="px-4 py-3 text-slate-600">NegCLIP</td><td className="px-4 py-3 text-center text-slate-600">53.7</td></tr>
+                  <tr><td className="px-4 py-3 text-slate-600">Tarsier (Base)</td><td className="px-4 py-3 text-center text-slate-600">55.7</td></tr>
+                  <tr className="bg-amber-50/50">
+                    <td className="px-4 py-3 font-bold text-amber-900">TARA (Ours)</td>
+                    <td className="px-4 py-3 text-center font-bold text-amber-700">69.0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
-            {/* Table 6: NegBench */}
-            <div>
-               <div className="flex items-center gap-3 mb-6">
-                <div className="bg-indigo-100 p-2 rounded-lg"><Zap className="text-indigo-600 w-5 h-5"/></div>
-                <h3 className="text-xl font-bold text-slate-900">Negation (MSR-VTT)</h3>
-              </div>
-              <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
-                <table className="min-w-full text-sm">
-                  <thead className="bg-slate-50 border-b border-slate-200">
-                    <tr>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-900">Model</th>
-                      <th className="px-4 py-3 text-center font-semibold text-slate-900">R@5</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    <tr><td className="px-4 py-3 text-slate-600">CLIP</td><td className="px-4 py-3 text-center text-slate-600">50.6</td></tr>
-                    <tr><td className="px-4 py-3 text-slate-600">NegCLIP</td><td className="px-4 py-3 text-center text-slate-600">53.7</td></tr>
-                    <tr><td className="px-4 py-3 text-slate-600">Tarsier (Base)</td><td className="px-4 py-3 text-center text-slate-600">55.7</td></tr>
-                     <tr className="bg-indigo-50/50">
-                      <td className="px-4 py-3 font-bold text-indigo-900">TARA (Ours)</td>
-                      <td className="px-4 py-3 text-center font-bold text-indigo-700">69.0</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+        {/* 3. Verb and Adverb Sensitivity */}
+        <div className="mb-20">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-gradient-to-br from-violet-500 to-purple-600 p-2.5 rounded-xl shadow-lg">
+              <Target className="text-white w-6 h-6"/>
             </div>
+            <h3 className="text-2xl font-bold text-slate-900">3. Verb and Adverb Sensitivity</h3>
+          </div>
+          <p className="text-slate-600 text-lg mb-8 ml-12 leading-relaxed">
+            <strong className="text-violet-600">Key Takeaway:</strong> TARA shows strong zero-shot ability to recognize verbs and adverbs which often require time-sensitive understanding (e.g., in distinguishing "walking slowly/quickly").
+          </p>
+          
+          <div className="ml-12">
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm max-w-2xl">
+              <p className="text-slate-600 text-sm italic">
+                Detailed results demonstrate TARA's superior performance on verb and adverb recognition tasks across multiple datasets.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Standard Benchmarks */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-2.5 rounded-xl shadow-lg">
+              <Sparkles className="text-white w-6 h-6"/>
+            </div>
+            <h3 className="text-2xl font-bold text-slate-900">4. Standard Benchmarks</h3>
+          </div>
+          <p className="text-slate-600 text-lg mb-8 ml-12 leading-relaxed">
+            <strong className="text-emerald-600">Key Takeaway:</strong> On the video classification and retrieval subsets of the MMEB-v2 benchmark, TARA outperforms all competing models.
+          </p>
+          
+          <div className="ml-12">
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm max-w-2xl">
+              <p className="text-slate-600 text-sm italic">
+                TARA achieves state-of-the-art results on MMEB-v2, demonstrating strong generalization beyond time-aware tasks.
+              </p>
+            </div>
+          </div>
         </div>
       </Section>
 
