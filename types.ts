@@ -16,3 +16,8 @@ export interface Section {
   title: string;
   content?: string;
 }
+
+export interface Affiliation {
+  id: string;
+  name: string;
+}

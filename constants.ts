@@ -1,6 +1,7 @@
 import { Author, LinkData } from './types';
 
-export const PAPER_TITLE = "TARA: Simple and Efficient Time Aware Retrieval Adaptation of MLLMs for Video Understanding";
+export const PAPER_TITLE = "Adapting MLLMs for Nuanced Video Retrieval";
+export const PAPER_SUBTITLE = "TARA: Text Adapted Retrieval Alignment";
 
 export const AUTHORS: Author[] = [
   {
@@ -16,23 +17,21 @@ export const AUTHORS: Author[] = [
 ];
 
 export const AFFILIATIONS = [
-  "¹University of Oxford",
+  { id: "1", name: "Visual Geometry Group, University of Oxford" },
 ];
 
 export const LINKS: LinkData[] = [
-  { label: "arXiv Paper", url: "https://arxiv.org/abs/2512.13511", icon: "pdf" },
+  { label: "Paper", url: "https://arxiv.org/pdf/2512.13511", icon: "pdf" },
+  { label: "arXiv", url: "https://arxiv.org/abs/2512.13511", icon: "pdf" },
   { label: "Code", url: "https://github.com/bpiyush/TARA", icon: "github" },
   { label: "Dataset", url: "https://huggingface.co/datasets/bpiyush/chirality-in-action", icon: "data" },
-  { label: "Demo (coming soon)", url: "#", icon: "video" },
 ];
 
-export const ABSTRACT = `
-Our objective is to build a general time-aware video-text embedding model for retrieval. To that end, we propose a simple and efficient recipe, dubbed TARA (Time Aware Retrieval Adaptation), to adapt Multimodal LLMs (MLLMs) to a time-aware video-text embedding model without using any video data at all. For evaluating time-awareness in retrieval, we propose a new benchmark with temporally opposite (chiral) actions as hard negatives and curated splits for chiral and non-chiral actions. We show that TARA outperforms all existing video-text models on this chiral benchmark while also achieving strong results on standard benchmarks. Furthermore, we discover additional benefits of TARA beyond time-awareness: (i) TARA embeddings are negation-aware as shown in NegBench benchmark that evaluates negation in video retrieval, (ii) TARA achieves state of the art performance on verb and adverb understanding in videos. Overall, TARA yields a strong, versatile, time-aware video-text embedding model with state of the art zero-shot performance.
-`;
+export const ABSTRACT = `Our objective is to build an embedding model that captures the nuanced relationship between a search query and candidate videos. We cover three aspects of nuanced retrieval: (i) temporal, (ii) negation, and (iii) multimodal. For temporal nuance, we consider chiral actions that need distinguishing between temporally opposite actions like "opening a door" vs. "closing a door". For negation, we consider queries with negators such as "not", "none" that allow users to specify what they do not want. For multimodal nuance, we consider the task of composed retrieval where the query comprises a video along with a text edit instruction. To that end, we repurpose a Multimodal Large Language Model (MLLM) trained to generate text into an embedding model. We fine-tune it with a contrastive loss on text alone with carefully sampled hard negatives that instill the desired nuances in the learned embedding space. Despite the text-only training, our method achieves state of the art performance on all benchmarks for nuanced video retrieval. We also show that text-only training reduces the modality gap between text and video embeddings, leading to better organization of the embedding space.`;
 
-export const BIBTEX = `@article{bagad2025tara,
-  title={TARA: Simple and Efficient Time Aware Retrieval Adaptation of MLLMs for Video Understanding},
-  author={Bagad, Piyush and Zisserman, Andrew},
-  journal={arXiv preprint},
-  year={2025}
+export const BIBTEX = `@article{bagad2026tara,
+  title   = {Adapting MLLMs for Nuanced Video Retrieval},
+  author  = {Bagad, Piyush and Zisserman, Andrew},
+  journal = {arXiv preprint arXiv:2512.13511},
+  year    = {2026}
 }`;
