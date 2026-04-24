@@ -1,29 +1,1054 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="title" content="Adapting MLLMs for Nuanced Video Retrieval" />
-    <meta name="description" content="TARA: Text-only contrastive fine-tuning of MLLMs for nuanced video retrieval — temporal, negation, and multimodal. State of the art on all benchmarks." />
-    <meta name="keywords" content="video retrieval, MLLM, multimodal, temporal, negation, composed retrieval, TARA, VGG Oxford" />
-    <meta name="author" content="Piyush Bagad, Andrew Zisserman" />
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content="Adapting MLLMs for Nuanced Video Retrieval" />
-    <meta property="og:description" content="TARA: Text-only fine-tuning of MLLMs achieves state of the art on nuanced video retrieval — temporal, negation, and multimodal." />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Adapting MLLMs for Nuanced Video Retrieval" />
-    <meta name="citation_title" content="Adapting MLLMs for Nuanced Video Retrieval" />
-    <meta name="citation_author" content="Bagad, Piyush" />
-    <meta name="citation_author" content="Zisserman, Andrew" />
-    <meta name="citation_publication_date" content="2026" />
-    <meta name="theme-color" content="#ffffff" />
-    <title>Adapting MLLMs for Nuanced Video Retrieval</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="title" content="Adapting MLLMs for Nuanced Video Retrieval">
+  <meta name="description" content="TARA: Text-only contrastive fine-tuning of MLLMs for nuanced video retrieval — temporal, negation, and multimodal. State of the art on all benchmarks.">
+  <meta name="keywords" content="video retrieval, MLLM, multimodal, temporal, negation, composed retrieval, TARA, VGG, Oxford">
+  <meta name="author" content="Piyush Bagad, Andrew Zisserman">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Adapting MLLMs for Nuanced Video Retrieval">
+  <meta property="og:description" content="TARA: Text-only fine-tuning of MLLMs achieves state of the art on nuanced video retrieval — temporal, negation, and multimodal.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Adapting MLLMs for Nuanced Video Retrieval">
+  <meta name="citation_title" content="Adapting MLLMs for Nuanced Video Retrieval">
+  <meta name="citation_author" content="Bagad, Piyush">
+  <meta name="citation_author" content="Zisserman, Andrew">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="theme-color" content="#ffffff">
+  <title>Adapting MLLMs for Nuanced Video Retrieval</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #1a1a1a;
+      background: #fff;
+    }
+
+    /* ── Scroll to top ── */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25);
+      transition: background .2s;
+    }
+    .scroll-to-top.visible { display: flex; }
+    .scroll-to-top:hover { background: #444; }
+
+    .icon-svg { width: 1.2em; height: 1.2em; fill: currentColor; flex-shrink: 0; }
+
+    /* ── Publication header ── */
+    .publication-header { padding: 4rem 1rem 2.5rem; }
+    .publication-venue {
+      display: inline-block;
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .25rem .75rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+    }
+    .publication-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.5rem !important;
+    }
+    .publication-authors {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .25rem .75rem;
+      font-size: 1.05rem;
+      margin-bottom: .5rem;
+    }
+    .author-block a {
+      border-bottom: 1px solid #ccc;
+      color: inherit;
+      transition: color .15s, border-color .15s;
+    }
+    .author-block a:hover { color: #4338ca; border-color: #4338ca; }
+    sup { font-size: .65em; color: #888; }
+    .publication-affiliations {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .25rem 1.25rem;
+      font-size: .9rem;
+      color: #666;
+      margin-bottom: .5rem;
+    }
+    .equal-contrib { font-size: .8rem; color: #888; margin-bottom: 1.5rem; }
+    .publication-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .5rem;
+    }
+    .publication-links .button {
+      font-size: .875rem;
+      font-weight: 600;
+      gap: .4rem;
+    }
+    .publication-links .button .icon { margin: 0; }
+
+    /* ── Teaser ── */
+    .teaser { background: #f8f9fa; border-top: 1px solid #eee; }
+    .teaser-figure { text-align: center; }
+    .teaser-figure img {
+      width: 100%;
+      border-radius: .75rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+      background: #fff;
+    }
+    .teaser-figure figcaption {
+      margin-top: .75rem;
+      font-size: .875rem;
+      color: #555;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    /* ── Color palette per nuance ── */
+    /* Temporal: indigo/purple */
+    --c-t-bg:     #f0f0ff;
+    --c-t-border: #c7d2fe;
+    --c-t-accent: #4338ca;
+    --c-t-muted:  #6366f1;
+    /* Negation: amber/orange */
+    --c-n-bg:     #fffbeb;
+    --c-n-border: #fcd34d;
+    --c-n-accent: #b45309;
+    --c-n-muted:  #d97706;
+    /* Multimodal: green */
+    --c-m-bg:     #f0fdf4;
+    --c-m-border: #bbf7d0;
+    --c-m-accent: #059669;
+    --c-m-muted:  #10b981;
+
+    /* ── Nuance explainer ── */
+    .nuance-intro { font-size: 1rem; color: #4b5563; line-height: 1.75; text-align: center; margin-bottom: 2.5rem; }
+
+    .nuance-block {
+      border-radius: 1rem;
+      border: 1.5px solid;
+      padding: 1.75rem;
+      margin-bottom: 1.75rem;
+    }
+    .nuance-block:last-child { margin-bottom: 0; }
+
+    .nuance-block.temporal { background: #f0f0ff; border-color: #c7d2fe; }
+    .nuance-block.negation { background: #fffbeb; border-color: #fcd34d; }
+    .nuance-block.multimodal { background: #f0fdf4; border-color: #bbf7d0; }
+
+    .nuance-header { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem; }
+    .nuance-icon {
+      width: 2.25rem; height: 2.25rem;
+      border-radius: .6rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .temporal .nuance-icon { background: #e0e7ff; color: #4338ca; }
+    .negation .nuance-icon { background: #fef3c7; color: #b45309; }
+    .multimodal .nuance-icon { background: #d1fae5; color: #059669; }
+
+    .nuance-badge {
+      display: inline-block;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .2rem .65rem;
+      border-radius: 999px;
+    }
+    .temporal  .nuance-badge { background: #e0e7ff; color: #4338ca; }
+    .negation  .nuance-badge { background: #fef3c7; color: #b45309; }
+    .multimodal .nuance-badge { background: #d1fae5; color: #059669; }
+
+    .nuance-block h3 { font-size: 1.1rem; font-weight: 700; margin: 0; color: #111; }
+    .nuance-block p  { font-size: .95rem; line-height: 1.75; margin: 0 0 1rem; color: #374151; }
+
+    /* ── Colored results section backgrounds ── */
+    .section-temporal  { background: #f4f3ff !important; border-top: 2px solid #c7d2fe; border-bottom: 2px solid #c7d2fe; }
+    .section-negation  { background: #fffdf0 !important; border-top: 2px solid #fcd34d; border-bottom: 2px solid #fcd34d; }
+    .section-multimodal { background: #f0fdf4 !important; border-top: 2px solid #bbf7d0; border-bottom: 2px solid #bbf7d0; }
+
+    /* ── Results section title badge ── */
+    .section-nuance-label {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .7rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; padding: .2rem .7rem;
+      border-radius: 999px; margin-bottom: .6rem;
+    }
+    .section-temporal  .section-nuance-label { background: #e0e7ff; color: #4338ca; }
+    .section-negation  .section-nuance-label { background: #fef3c7; color: #b45309; }
+    .section-multimodal .section-nuance-label { background: #d1fae5; color: #059669; }
+
+    /* Tint key result components inside colored sections */
+    .section-temporal  .ours-row td { background: #ddd6fe !important; color: #3730a3; }
+    .section-negation  .ours-row td { background: #fde68a !important; color: #78350f; }
+    .section-multimodal .ours-row td { background: #d1fae5 !important; color: #064e3b; }
+    .section-temporal  .expand-btn { color: #4338ca; }
+    .section-negation  .expand-btn { color: #b45309; }
+    .section-multimodal .expand-btn { color: #059669; }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: 1.5rem !important;
+      font-weight: 700 !important;
+      text-align: center;
+      padding-bottom: .5rem;
+      border-bottom: 2px solid #e5e7eb;
+      margin-bottom: 1.5rem !important;
+    }
+
+    /* ── Abstract ── */
+    .abstract-copy { font-size: 1.0rem; line-height: 1.8; color: #374151; text-align: left; }
+
+    /* ── Method cards ── */
+    .method-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .method-card { background: #fff; border-radius: .75rem; border: 1px solid #e5e7eb; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+    .method-card .step-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .5rem; }
+    .method-card p { font-size: .875rem; color: #4b5563; line-height: 1.6; margin: 0; }
+    .step-indigo { color: #6366f1; }
+    .step-amber  { color: #d97706; }
+    .step-violet { color: #059669; }
+    .border-indigo { border-color: #c7d2fe !important; }
+    .border-amber  { border-color: #fde68a !important; }
+    .border-violet { border-color: #bbf7d0 !important; }
+
+    .method-note { background: #fff; border: 1px solid #e5e7eb; border-radius: .75rem; padding: 1rem 1.25rem; font-size: .875rem; color: #4b5563; text-align: center; margin-top: 1rem; }
+
+    /* ── Paper figures ── */
+    .paper-figure { margin: 1.5rem auto; text-align: center; }
+    .paper-figure img {
+      width: 100%;
+      border-radius: .75rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+      background: #fff;
+      display: block;
+      margin: 0 auto;
+    }
+    .paper-figure figcaption { margin-top: .5rem; font-size: .85rem; color: #555; line-height: 1.6; text-align: center; }
+
+    /* ── Results tables ── */
+    .results-block { margin-bottom: 2.5rem; }
+    .table-title { font-size: 1rem !important; font-weight: 600 !important; margin-bottom: .75rem !important; text-align: center; }
+    .results-table-wrapper { overflow-x: auto; border-radius: .75rem; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+    /* Narrow wrappers are centered via a flex parent */
+    .table-center { display: flex; justify-content: center; margin: 0 auto; }
+    .results-table { font-size: .8rem; margin: 0 !important; }
+    .results-table thead tr { background: #f9fafb; }
+    .results-table thead th { padding: .6rem .75rem; font-size: .75rem; font-weight: 600; color: #4b5563; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
+    .results-table tbody td { padding: .55rem .75rem; vertical-align: middle; border-bottom: 1px solid #f3f4f6; }
+    .results-table tbody tr:last-child td { border-bottom: none; }
+    .results-table tbody tr:hover td { background: #f9fafb; }
+    .ours-row td { background: #eef2ff !important; font-weight: 600; color: #3730a3; }
+    .ours-row:hover td { background: #e0e7ff !important; }
+    .oracle-row td { background: #f0fdf4; color: #166534; font-style: italic; }
+    .divider-row td { background: #f9fafb; color: #9ca3af; font-size: .75rem; font-style: italic; padding: .3rem .75rem; }
+
+    /* ── Analysis cards ── */
+    .analysis-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    @media (max-width: 640px) { .analysis-cards { grid-template-columns: 1fr; } }
+    .analysis-card { border-radius: .75rem; border: 1px solid #e5e7eb; padding: 1.25rem; }
+    .analysis-card h4 { font-weight: 600; font-size: .95rem; margin-bottom: .5rem; }
+    .analysis-card p { font-size: .875rem; line-height: 1.6; margin: 0; color: #4b5563; }
+    .card-indigo { background: #eef2ff; border-color: #c7d2fe; }
+    .card-indigo h4 { color: #3730a3; }
+    .card-indigo p { color: #4338ca; }
+
+    /* ── Expandable ── */
+    .expandable-section { margin-top: 1.25rem; }
+    .expand-btn {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: .875rem;
+      font-weight: 600;
+      color: #4338ca;
+      padding: 0;
+      transition: color .15s;
+    }
+    .expand-btn:hover { color: #3730a3; }
+    .expand-arrow { transition: transform .2s; }
+    .expand-arrow.open { transform: rotate(180deg); }
+    .expandable-content { margin-top: 1rem; display: none; }
+    .expandable-content.open { display: block; }
+    .expand-note { font-size: .8rem; color: #6b7280; margin-bottom: .75rem; }
+
+    /* ── BibTeX ── */
+    .bibtex-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: .5rem; }
+    .bibtex-header .section-title { margin-bottom: 0 !important; border: none; padding: 0; }
+    .copy-bibtex-btn {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      background: none;
+      border: 1px solid #d1d5db;
+      border-radius: .5rem;
+      padding: .35rem .75rem;
+      font-size: .8rem;
+      font-weight: 600;
+      color: #4b5563;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .copy-bibtex-btn:hover { background: #f3f4f6; color: #1a1a1a; }
+    #bibtex-code {
+      background: #111827;
+      color: #d1d5db;
+      border-radius: .75rem;
+      padding: 1.25rem;
+      font-size: .8rem;
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+    #bibtex-code code { color: inherit; background: none; font-size: inherit; }
+
+    /* ── Footer ── */
+    .footer { background: #fff; border-top: 1px solid #e5e7eb; padding: 2.5rem 1rem; }
+    .footer p { font-size: .875rem; color: #9ca3af; margin: 0; }
+    .footer a { color: #9ca3af; text-decoration: underline; }
+    .footer a:hover { color: #374151; }
+
+    /* ── Utility ── */
+    .paper-copy { font-size: .975rem; color: #374151; line-height: 1.75; }
+    .section.is-light { background: #f8f9fa; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+    .has-text-right { text-align: right !important; }
+
+    /* Table section grouping */
+    .col-faded td, .col-faded { color: #9ca3af; }
+    th.col-group-a, td.col-group-a { background: #f9fafb; }
+    th.col-group-b, td.col-group-b { background: #fff; }
+    .th-sub { font-size: .7rem; font-weight: 500; color: #6b7280; }
+
+    @media (max-width: 768px) {
+      .publication-title { font-size: 1.5rem; }
+      .key-numbers { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="scroll-to-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Scroll to top" aria-label="Scroll to top">
+    <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5l-7 7 1.41 1.41L11 8.83V19h2V8.83l4.59 4.58L19 12z"/></svg>
+  </button>
+
+  <main>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero publication-header">
+      <div class="hero-body">
+        <div class="container is-max-desktop has-text-centered">
+          <p class="publication-venue">arXiv 2026</p>
+          <h1 class="title publication-title">Adapting MLLMs for<br>Nuanced Video Retrieval</h1>
+
+          <div class="publication-authors">
+            <span class="author-block"><a href="https://bpiyush.github.io/" target="_blank" rel="noreferrer">Piyush Bagad</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://www.robots.ox.ac.uk/~az/" target="_blank" rel="noreferrer">Andrew Zisserman</a><sup>1</sup></span>
+          </div>
+
+          <div class="publication-affiliations">
+            <span><sup>1</sup>Visual Geometry Group, University of Oxford</span>
+          </div>
+
+          <div class="publication-links" style="margin-top:1.25rem;">
+            <span class="link-block">
+              <a class="external-link button is-normal is-rounded is-dark" href="https://arxiv.org/pdf/2512.13511" target="_blank" rel="noreferrer">
+                <span class="icon">
+                  <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l6 6v14H6zm7 1.5V9h5.5zM9 13h2.5a2.5 2.5 0 010 5H10v3H9zm1 1v3h1.5a1.5 1.5 0 000-3zm5 0c1.66 0 3 1.34 3 3v1c0 1.66-1.34 3-3 3h-2v-7zm-1 1v5h1a2 2 0 002-2v-1a2 2 0 00-2-2zm-8 0h2v1H7v1h1v1H7v2H6z"/></svg>
+                </span>
+                <span>Paper</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a class="external-link button is-normal is-rounded is-dark" href="https://arxiv.org/abs/2512.13511" target="_blank" rel="noreferrer">
+                <span class="icon">
+                  <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10.27 5.57 8.3 5 6 5a4 4 0 00-4 4v9a1 1 0 001.45.89C5.05 18.09 6.39 17.75 8 17.75c1.82 0 3.54.43 4 1 .46-.57 2.18-1 4-1 1.61 0 2.95.34 4.55 1.14A1 1 0 0022 18V9a4 4 0 00-4-4c-2.3 0-4.27.57-6 1.5M4 9a2 2 0 012-2c2.04 0 3.79.53 5 1.33v8.2c-1.3-.5-2.67-.78-4-.78-1.03 0-2.03.14-3 .42zm16 7.17c-.97-.28-1.97-.42-3-.42-1.33 0-2.7.28-4 .78v-8.2c1.21-.8 2.96-1.33 5-1.33a2 2 0 012 2z"/></svg>
+                </span>
+                <span>arXiv</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a class="external-link button is-normal is-rounded is-dark" href="https://github.com/bpiyush/TARA" target="_blank" rel="noreferrer">
+                <span class="icon">
+                  <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5A12 12 0 008.2 23.9c.6.11.82-.26.82-.58v-2.23c-3.34.73-4.04-1.42-4.04-1.42-.55-1.38-1.33-1.75-1.33-1.75-1.09-.73.08-.72.08-.72 1.2.09 1.84 1.22 1.84 1.22 1.08 1.82 2.82 1.3 3.5.99.1-.77.42-1.3.76-1.6-2.67-.3-5.47-1.32-5.47-5.86 0-1.3.47-2.37 1.24-3.21-.13-.3-.54-1.5.12-3.13 0 0 1.01-.32 3.3 1.23A11.6 11.6 0 0112 6.6c1.02 0 2.05.14 3.01.4 2.29-1.55 3.29-1.23 3.29-1.23.67 1.63.26 2.83.13 3.13.77.84 1.23 1.91 1.23 3.21 0 4.55-2.8 5.55-5.48 5.85.43.37.82 1.1.82 2.22v3.29c0 .32.21.7.83.58A12 12 0 0012 .5"/></svg>
+                </span>
+                <span>Code</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a class="external-link button is-normal is-rounded is-dark" href="https://huggingface.co/datasets/bpiyush/chirality-in-action" target="_blank" rel="noreferrer">
+                <span class="icon">
+                  <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C7 3 3 5.24 3 8v12c0 2.76 4 5 9 5s9-2.24 9-5V8c0-2.76-4-5-9-5m0 2c4.42 0 7 1.79 7 3s-2.58 3-7 3-7-1.79-7-3 2.58-3 7-3M5 12.35C6.44 13.38 9.04 14 12 14s5.56-.62 7-1.65V14c0 1.21-2.58 3-7 3s-7-1.79-7-3v-1.65m0 4C6.44 17.38 9.04 18 12 18s5.56-.62 7-1.65V18c0 1.21-2.58 3-7 3s-7-1.79-7-3v-1.65"/></svg>
+                </span>
+                <span>Dataset</span>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TEASER ==================== -->
+    <section class="hero teaser">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <figure class="paper-figure teaser-figure">
+            <img src="public/figures/teaser.png" alt="TARA teaser: text-only tuning setup and tSNE before/after showing improved separation for chiral actions." loading="eager">
+            <figcaption>
+              TARA fine-tunes a Multimodal LLM for nuanced video retrieval using only text triplets. Despite never seeing video during training, it achieves state-of-the-art on temporal, negation, and multimodal retrieval benchmarks, while also closing the modality gap between video and text embeddings.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== NUANCED RETRIEVAL ==================== -->
+    <section class="section" id="nuances">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 section-title">What is Nuanced Video Retrieval?</h2>
+        <p class="nuance-intro">
+          Standard video retrieval models struggle with queries that require fine-grained semantic understanding. We study three distinct dimensions of nuance that everyday retrieval systems fail to handle correctly.
+        </p>
+
+        <!-- Temporal -->
+        <div class="nuance-block temporal">
+          <div class="nuance-header">
+            <div class="nuance-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <span class="nuance-badge">Temporal Nuance</span>
+            <h3>Chiral Actions</h3>
+          </div>
+          <p>
+            Many actions are <em>chiral</em> — they have a temporal mirror that looks identical frame-by-frame but describes the opposite event. "Opening a door" and "closing a door" share the same visual content played in reverse. A retrieval model must understand the <em>direction of time</em> to distinguish them. We evaluate this on the <strong>CiA-Retrieval</strong> and <strong>RTime</strong> benchmarks.
+          </p>
+          <figure class="paper-figure">
+            <img src="public/figures/qual-chiral.png" alt="Qualitative temporal retrieval examples: chiral action pairs where TARA correctly distinguishes the direction of motion.">
+            <figcaption><strong>Temporal nuance.</strong> Retrieval examples for chiral queries — standard models retrieve the temporally opposite action; TARA selects the correct one.</figcaption>
+          </figure>
+        </div>
+
+        <!-- Negation -->
+        <div class="nuance-block negation">
+          <div class="nuance-header">
+            <div class="nuance-icon"><i class="fa-solid fa-ban"></i></div>
+            <span class="nuance-badge">Negation Nuance</span>
+            <h3>Negated Queries</h3>
+          </div>
+          <p>
+            Users often want to <em>exclude</em> certain attributes: "a dog <strong>not</strong> on grass", "someone running <strong>without</strong> a ball". CLIP-style models are notoriously insensitive to negation — they tend to retrieve results that match the positive noun phrase and ignore the negator entirely. We evaluate on <strong>NegBench</strong> (image and video) and the <strong>Adverb Recognition</strong> benchmark.
+          </p>
+          <figure class="paper-figure">
+            <img src="public/figures/qual-negbench.png" alt="Qualitative negation retrieval examples: TARA correctly excludes items matching the negated attribute.">
+            <figcaption><strong>Negation nuance.</strong> Retrieval examples with negated text queries — TARA correctly excludes videos matching the negated attribute while the base model ignores the negation.</figcaption>
+          </figure>
+        </div>
+
+        <!-- Multimodal -->
+        <div class="nuance-block multimodal">
+          <div class="nuance-header">
+            <div class="nuance-icon"><i class="fa-solid fa-photo-film"></i></div>
+            <span class="nuance-badge">Multimodal Nuance</span>
+            <h3>Composed Retrieval</h3>
+          </div>
+          <p>
+            Sometimes the query itself is multimodal: a <em>reference video</em> combined with a <em>text edit instruction</em> (e.g., "same scene but with snow instead of rain"). The model must fuse both modalities to retrieve the correctly modified target. We evaluate on the <strong>WebVid-CoVR</strong> benchmark.
+          </p>
+          <figure class="paper-figure">
+            <img src="public/figures/qual-covr.png" alt="Qualitative composed video retrieval examples: video + text edit instruction queries.">
+            <figcaption><strong>Multimodal nuance.</strong> Composed retrieval examples — given a source video and a text modification, TARA retrieves the correctly edited target video.</figcaption>
+          </figure>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== ABSTRACT ==================== -->
+    <section class="section hero is-light" id="abstract">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <h2 class="title is-3 section-title">Abstract</h2>
+          <div class="content">
+            <p class="abstract-copy">
+              Our objective is to build an embedding model that captures the nuanced relationship between a search query and candidate videos. We cover three aspects of nuanced retrieval: (i) <em>temporal</em>, (ii) <em>negation</em>, and (iii) <em>multimodal</em>. For temporal nuance, we consider chiral actions that need distinguishing between temporally opposite actions like "opening a door" vs. "closing a door". For negation, we consider queries with negators such as "not", "none" that allow users to specify what they do not want. For multimodal nuance, we consider the task of composed retrieval where the query comprises a video along with a text edit instruction. To that end, we repurpose a Multimodal Large Language Model (MLLM) trained to generate text into an embedding model. We fine-tune it with a contrastive loss on text alone with carefully sampled hard negatives that instill the desired nuances in the learned embedding space. Despite the text-only training, our method achieves state of the art performance on all benchmarks for nuanced video retrieval. We also show that text-only training reduces the modality gap between text and video embeddings, leading to better organization of the embedding space.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== METHOD ==================== -->
+    <section class="section" id="method">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 section-title">Method: The TARA Recipe</h2>
+        <div class="content paper-copy">
+          <p>
+            <strong>TARA</strong> (Text Adapted Retrieval Alignment) repurposes a Multimodal LLM as a joint video-text embedding model. We extract embeddings via an "Explicit One-word Limitation" (EOL) prompt — e.g., <em>"&lt;video&gt;: Summarize the video in one word:"</em> — and use the final hidden state as the embedding. We then fine-tune with a contrastive loss on text triplets with carefully engineered hard negatives. This text-only training <em>reduces the modality gap</em> between video and text embeddings, which explains its surprising effectiveness.
+          </p>
+        </div>
+
+        <div class="method-cards">
+          <div class="method-card border-indigo">
+            <div class="step-label step-indigo">A. Temporal Nuance</div>
+            <p>Extract chiral verb-object pairs from Ego4D. Generate temporally antonymous sentences (e.g., "closes the box" &rarr; "opens the box") using an LLM as hard negatives.</p>
+          </div>
+          <div class="method-card border-amber">
+            <div class="step-label step-amber">B. Negation Nuance</div>
+            <p>Filter NLI triplets where the hard-negative uses explicit negation operators (not, never, none&hellip;), training the model to precisely understand what is absent.</p>
+          </div>
+          <div class="method-card border-violet">
+            <div class="step-label step-violet">C. Multimodal Nuance</div>
+            <p>Translate Composed Video Retrieval to a text task: anchor = source caption + edit instruction, positive = edited caption, negative = original (unedited) caption.</p>
+          </div>
+        </div>
+
+        <figure class="paper-figure">
+          <img src="public/figures/nli-nuance.png" alt="NLI-Nuance dataset construction with temporal, negation, and multimodal text triplets.">
+          <figcaption><strong>NLI-Nuance.</strong> Dataset construction with targeted hard negatives for each nuance type: temporal antonyms, negation operators, and composed edit instructions.</figcaption>
+        </figure>
+
+        <div class="method-note">
+          The resulting dataset <strong>NLI-Nuance</strong> has just <strong>20,000 text triplets</strong> (8K NLI + 1K temporal + 1K negation + 10K multimodal). Fine-tuning only the LLM weights (vision encoder frozen) for 2 epochs takes <strong>less than one hour</strong> on 8&times; RTX A6000 GPUs.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESULTS: TEMPORAL ==================== -->
+    <section class="section hero section-temporal" id="temporal">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <p class="has-text-centered"><span class="section-nuance-label"><i class="fa-solid fa-clock-rotate-left"></i>&nbsp; Temporal Nuance</span></p>
+          <h2 class="title is-3 section-title">Results: Temporal Nuance</h2>
+          <div class="content paper-copy">
+            <p>
+              <strong style="color:#4338ca;">Key Takeaway:</strong> TARA achieves state-of-the-art on the CiA-Retrieval benchmark across all three datasets and all difficulty settings (Chiral, Static, All), while being fine-tuned on text alone.
+            </p>
+          </div>
+
+          <div class="results-block">
+            <h3 class="subtitle is-5 table-title">CiA-Retrieval (mAP &uarr;)</h3>
+            <p style="font-size:.85rem;color:#6b7280;margin-bottom:.75rem;">
+              <em>Chiral</em>: gallery has correct + temporal-opposite action. <em>Static</em>: gallery has correct + temporally irrelevant actions. <em>All</em>: full gallery. Higher is better.
+            </p>
+            <div class="results-table-wrapper">
+              <table class="table is-fullwidth results-table">
+                <thead>
+                  <tr>
+                    <th rowspan="2">Method</th>
+                    <th rowspan="2" style="text-align:center;">Data (K)</th>
+                    <th colspan="3" style="text-align:center;border-left:1px solid #e5e7eb;">SSv2</th>
+                    <th colspan="3" style="text-align:center;border-left:1px solid #e5e7eb;">EPIC</th>
+                    <th colspan="3" style="text-align:center;border-left:1px solid #e5e7eb;">Charades</th>
+                  </tr>
+                  <tr>
+                    <th style="text-align:center;border-left:1px solid #e5e7eb;"><span class="th-sub">Chiral</span></th>
+                    <th style="text-align:center;"><span class="th-sub">Static</span></th>
+                    <th style="text-align:center;"><span class="th-sub">All</span></th>
+                    <th style="text-align:center;border-left:1px solid #e5e7eb;"><span class="th-sub">Chiral</span></th>
+                    <th style="text-align:center;"><span class="th-sub">Static</span></th>
+                    <th style="text-align:center;"><span class="th-sub">All</span></th>
+                    <th style="text-align:center;border-left:1px solid #e5e7eb;"><span class="th-sub">Chiral</span></th>
+                    <th style="text-align:center;"><span class="th-sub">Static</span></th>
+                    <th style="text-align:center;"><span class="th-sub">All</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>CLIP (avg.)</td><td style="text-align:center;">—</td>
+                    <td style="text-align:center;">52.0</td><td style="text-align:center;">18.3</td><td style="text-align:center;">12.7</td>
+                    <td style="text-align:center;">51.0</td><td style="text-align:center;">12.0</td><td style="text-align:center;">7.0</td>
+                    <td style="text-align:center;">48.4</td><td style="text-align:center;">13.2</td><td style="text-align:center;">6.5</td>
+                  </tr>
+                  <tr>
+                    <td>InternVideo 2</td><td style="text-align:center;">—</td>
+                    <td style="text-align:center;">52.5</td><td style="text-align:center;">35.7</td><td style="text-align:center;">20.6</td>
+                    <td style="text-align:center;">48.3</td><td style="text-align:center;">22.1</td><td style="text-align:center;">8.8</td>
+                    <td style="text-align:center;">50.7</td><td style="text-align:center;">11.9</td><td style="text-align:center;">11.9</td>
+                  </tr>
+                  <tr>
+                    <td>VLM2Vec-V2 (multimodal)</td><td style="text-align:center;">1700</td>
+                    <td style="text-align:center;">58.8</td><td style="text-align:center;">27.8</td><td style="text-align:center;">15.9</td>
+                    <td style="text-align:center;">49.4</td><td style="text-align:center;">25.4</td><td style="text-align:center;">12.9</td>
+                    <td style="text-align:center;">53.5</td><td style="text-align:center;">18.8</td><td style="text-align:center;">10.5</td>
+                  </tr>
+                  <tr>
+                    <td>CaRe</td><td style="text-align:center;">275</td>
+                    <td style="text-align:center;">66.4</td><td style="text-align:center;">46.2</td><td style="text-align:center;">23.7</td>
+                    <td style="text-align:center;">62.3</td><td style="text-align:center;">25.0</td><td style="text-align:center;">16.9</td>
+                    <td style="text-align:center;">56.1</td><td style="text-align:center;">25.2</td><td style="text-align:center;">12.9</td>
+                  </tr>
+                  <tr>
+                    <td>ArrowRL</td><td style="text-align:center;">25</td>
+                    <td style="text-align:center;">67.5</td><td style="text-align:center;">33.8</td><td style="text-align:center;">22.5</td>
+                    <td style="text-align:center;">55.7</td><td style="text-align:center;">12.4</td><td style="text-align:center;">9.6</td>
+                    <td style="text-align:center;">57.1</td><td style="text-align:center;">18.6</td><td style="text-align:center;">12.2</td>
+                  </tr>
+                  <tr>
+                    <td>Qwen3VL-Emb.</td><td style="text-align:center;">NA</td>
+                    <td style="text-align:center;">72.0</td><td style="text-align:center;">43.4</td><td style="text-align:center;">31.8</td>
+                    <td style="text-align:center;">62.1</td><td style="text-align:center;">28.6</td><td style="text-align:center;">20.6</td>
+                    <td style="text-align:center;">65.3</td><td style="text-align:center;">37.3</td><td style="text-align:center;">26.1</td>
+                  </tr>
+                  <tr>
+                    <td>Tarsier 2 (base)</td><td style="text-align:center;">—</td>
+                    <td style="text-align:center;">77.7</td><td style="text-align:center;">26.9</td><td style="text-align:center;">24.0</td>
+                    <td style="text-align:center;">67.4</td><td style="text-align:center;">22.0</td><td style="text-align:center;">15.3</td>
+                    <td style="text-align:center;">60.5</td><td style="text-align:center;">13.4</td><td style="text-align:center;">9.2</td>
+                  </tr>
+                  <tr class="ours-row">
+                    <td>Tarsier 2 + TARA (Ours)</td><td style="text-align:center;">20</td>
+                    <td style="text-align:center;"><strong>88.9</strong></td><td style="text-align:center;"><strong>66.7</strong></td><td style="text-align:center;"><strong>58.6</strong></td>
+                    <td style="text-align:center;"><strong>81.1</strong></td><td style="text-align:center;"><strong>45.6</strong></td><td style="text-align:center;"><strong>38.9</strong></td>
+                    <td style="text-align:center;"><strong>71.4</strong></td><td style="text-align:center;"><strong>38.6</strong></td><td style="text-align:center;"><strong>29.0</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <figure class="paper-figure">
+            <img src="public/figures/tsne-chiral.png" alt="tSNE embeddings for chiral pairs before and after fine-tuning, showing improved text-video alignment.">
+            <figcaption><strong>tSNE visualisation.</strong> Chiral action embeddings before (base) and after TARA fine-tuning: temporally opposite pairs become clearly separable.</figcaption>
+          </figure>
+
+          <div class="results-block">
+            <h3 class="subtitle is-5 table-title">Reversed in Time (RTime) — R@1 &uarr;</h3>
+            <p style="font-size:.85rem;color:#6b7280;margin-bottom:.75rem;">Arrow-of-time benchmark: given a video, choose the correct vs. time-reversed caption (T2V) and vice versa (V2T).</p>
+            <div class="results-table-wrapper" style="max-width:400px;margin:0 auto">
+              <table class="table is-fullwidth results-table">
+                <thead>
+                  <tr>
+                    <th>Method</th>
+                    <th style="text-align:right;">T2V</th>
+                    <th style="text-align:right;">V2T</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Singularity (zero-shot)</td><td style="text-align:right;">48.7</td><td style="text-align:right;">49.9</td></tr>
+                  <tr><td>InternVideo2-1B (zero-shot)</td><td style="text-align:right;">50.0</td><td style="text-align:right;">51.0</td></tr>
+                  <tr><td>Qwen2.5VL (zero-shot)</td><td style="text-align:right;">53.4</td><td style="text-align:right;">66.6</td></tr>
+                  <tr><td>Tarsier 2 (zero-shot)</td><td style="text-align:right;">58.8</td><td style="text-align:right;">59.5</td></tr>
+                  <tr class="divider-row"><td colspan="3">— fine-tuned on RTime —</td></tr>
+                  <tr><td>CLIP4Clip</td><td style="text-align:right;">49.8</td><td style="text-align:right;">49.8</td></tr>
+                  <tr><td>UMT-Neg</td><td style="text-align:right;">54.5</td><td style="text-align:right;">54.2</td></tr>
+                  <tr><td>ArrowRL-Qwen2.5</td><td style="text-align:right;">55.6</td><td style="text-align:right;">69.6</td></tr>
+                  <tr class="ours-row">
+                    <td>Tarsier 2 + TARA (Ours)</td>
+                    <td style="text-align:right;"><strong>67.2</strong></td>
+                    <td style="text-align:right;"><strong>77.9</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESULTS: NEGATION ==================== -->
+    <section class="section section-negation" id="negation">
+      <div class="container is-max-desktop">
+          <p class="has-text-centered"><span class="section-nuance-label"><i class="fa-solid fa-ban"></i>&nbsp; Negation Nuance</span></p>
+        <h2 class="title is-3 section-title">Results: Negation Nuance</h2>
+        <div class="content paper-copy">
+          <p>
+            <strong style="color:#b45309;">Key Takeaway:</strong> TARA (zero-shot) dramatically outperforms all CLIP- and NegCLIP-based models fine-tuned on negation-augmented caption data, on both image (COCO) and video (MSR-VTT) retrieval.
+          </p>
+        </div>
+
+        <div class="results-block">
+          <h3 class="subtitle is-5 table-title">NegBench — R@5 &uarr;</h3>
+          <p style="font-size:.85rem;color:#6b7280;margin-bottom:.75rem;"><em>Std.</em>: standard queries. <em>Neg.</em>: negation queries (e.g., "a dog but not on grass"). Higher is better.</p>
+          <div class="results-table-wrapper">
+            <table class="table is-fullwidth results-table">
+              <thead>
+                <tr>
+                  <th rowspan="2">Method</th>
+                  <th rowspan="2" style="font-size:.75rem;">Fine-tuning data</th>
+                  <th colspan="2" style="text-align:center;border-left:1px solid #e5e7eb;">COCO</th>
+                  <th colspan="2" style="text-align:center;border-left:1px solid #e5e7eb;">MSR-VTT</th>
+                </tr>
+                <tr>
+                  <th style="text-align:center;border-left:1px solid #e5e7eb;"><span class="th-sub">Std.</span></th>
+                  <th style="text-align:center;"><span class="th-sub">Neg.</span></th>
+                  <th style="text-align:center;border-left:1px solid #e5e7eb;"><span class="th-sub">Std.</span></th>
+                  <th style="text-align:center;"><span class="th-sub">Neg.</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>CLIP (none)</td><td style="font-size:.75rem;">None</td><td style="text-align:center;">54.8</td><td style="text-align:center;">48.0</td><td style="text-align:center;">50.6</td><td style="text-align:center;">45.8</td></tr>
+                <tr><td>CLIP (CC)</td><td style="font-size:.75rem;">CC (img+txt)</td><td style="text-align:center;">58.8</td><td style="text-align:center;">54.5</td><td style="text-align:center;">53.7</td><td style="text-align:center;">49.9</td></tr>
+                <tr><td>NegCLIP (none)</td><td style="font-size:.75rem;">None</td><td style="text-align:center;">68.7</td><td style="text-align:center;">64.4</td><td style="text-align:center;">53.7</td><td style="text-align:center;">51.0</td></tr>
+                <tr><td>NegCLIP (CC-NegCap)</td><td style="font-size:.75rem;">CC-NegCap</td><td style="text-align:center;">68.6</td><td style="text-align:center;">67.5</td><td style="text-align:center;">56.5</td><td style="text-align:center;">54.6</td></tr>
+                <tr><td>Tarsier 2 (base)</td><td style="font-size:.75rem;">None</td><td style="text-align:center;">33.3</td><td style="text-align:center;">21.5</td><td style="text-align:center;">25.6</td><td style="text-align:center;">18.9</td></tr>
+                <tr class="ours-row">
+                  <td>Tarsier 2 + TARA (Ours)</td>
+                  <td style="font-size:.75rem;">NLI-Nuance (text only)</td>
+                  <td style="text-align:center;"><strong>76.7</strong></td><td style="text-align:center;"><strong>73.6</strong></td>
+                  <td style="text-align:center;"><strong>65.1</strong></td><td style="text-align:center;"><strong>65.0</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="results-block">
+          <h3 class="subtitle is-5 table-title">Adverb Recognition — Accuracy &uarr;</h3>
+          <p style="font-size:.85rem;color:#6b7280;margin-bottom:.75rem;">Given a video and an action verb, select the correct adverb between two choices (e.g., "slowly" vs. "quickly").</p>
+          <div class="results-table-wrapper" style="max-width:420px;margin:0 auto">
+            <table class="table is-fullwidth results-table">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th style="text-align:center;">VATEX</th>
+                  <th style="text-align:center;">MSRVTT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Chance</td><td style="text-align:center;">50.0</td><td style="text-align:center;">50.0</td></tr>
+                <tr><td>Action Modifiers (semi-sup.)</td><td style="text-align:center;">64.2</td><td style="text-align:center;">—</td></tr>
+                <tr><td>AM + Pseudo-labels</td><td style="text-align:center;">67.5</td><td style="text-align:center;">70.5</td></tr>
+                <tr><td>Tarsier 2 (base)</td><td style="text-align:center;">57.4</td><td style="text-align:center;">56.6</td></tr>
+                <tr class="ours-row">
+                  <td>Tarsier 2 + TARA (Ours)</td>
+                  <td style="text-align:center;"><strong>74.8</strong></td>
+                  <td style="text-align:center;"><strong>76.8</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESULTS: MULTIMODAL ==================== -->
+    <section class="section hero section-multimodal" id="multimodal">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <p class="has-text-centered"><span class="section-nuance-label"><i class="fa-solid fa-photo-film"></i>&nbsp; Multimodal Nuance</span></p>
+          <h2 class="title is-3 section-title">Results: Multimodal Nuance</h2>
+          <div class="content paper-copy">
+            <p>
+              <strong style="color:#059669;">Key Takeaway:</strong> TARA handles queries composed of a video + a text edit instruction (Composed Video Retrieval). It outperforms even methods fine-tuned directly on the WebVid-CoVR dataset, using only text during training.
+            </p>
+          </div>
+
+          <div class="results-block">
+            <h3 class="subtitle is-5 table-title">WebVid-CoVR &uarr;</h3>
+            <p style="font-size:.85rem;color:#6b7280;margin-bottom:.75rem;">Query = source video + text edit instruction. Goal: retrieve the edited video. Evaluated on 2,556 query-video pairs.</p>
+            <div class="results-table-wrapper" style="max-width:460px;margin:0 auto">
+              <table class="table is-fullwidth results-table">
+                <thead>
+                  <tr>
+                    <th>Method</th>
+                    <th style="text-align:center;">R@1</th>
+                    <th style="text-align:center;">R@5</th>
+                    <th style="text-align:center;">R@10</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="divider-row"><td colspan="4">Zero-shot</td></tr>
+                  <tr><td>BLIP (V+T)</td><td style="text-align:center;">45.5</td><td style="text-align:center;">70.5</td><td style="text-align:center;">79.5</td></tr>
+                  <tr><td>CLIP (V+T)</td><td style="text-align:center;">44.4</td><td style="text-align:center;">69.1</td><td style="text-align:center;">77.6</td></tr>
+                  <tr class="ours-row">
+                    <td>Tarsier 2 + TARA (Ours)</td>
+                    <td style="text-align:center;"><strong>66.3</strong></td>
+                    <td style="text-align:center;"><strong>86.7</strong></td>
+                    <td style="text-align:center;"><strong>91.5</strong></td>
+                  </tr>
+                  <tr class="divider-row"><td colspan="4">Fine-tuned on CoVR data</td></tr>
+                  <tr><td>CLIP (V+T)</td><td style="text-align:center;">50.6</td><td style="text-align:center;">77.1</td><td style="text-align:center;">85.1</td></tr>
+                  <tr><td>Ventura et al.</td><td style="text-align:center;">53.1</td><td style="text-align:center;">79.9</td><td style="text-align:center;">86.9</td></tr>
+                  <tr><td>Ventura et al. (v2)</td><td style="text-align:center;">59.8</td><td style="text-align:center;">83.8</td><td style="text-align:center;">91.3</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESULTS: STANDARD ==================== -->
+    <section class="section" id="standard">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 section-title">Results: Standard Benchmarks (MMEB-V2)</h2>
+        <div class="content paper-copy">
+          <p>
+            <strong style="color:#059669;">Key Takeaway:</strong> Text-only fine-tuning does not hurt standard video understanding. TARA comprehensively improves upon Tarsier 2 and is competitive with models trained on orders of magnitude more multimodal data.
+          </p>
+          <p style="font-size:.85rem;color:#6b7280;">Video classification and retrieval tasks from MMEB-V2. TARA &oplus; Q3VLE = ensemble of TARA and Qwen3VL-Embedding.</p>
+        </div>
+
+        <div class="results-block">
+          <div class="results-table-wrapper">
+            <table class="table is-fullwidth results-table">
+              <thead>
+                <tr>
+                  <th rowspan="2">Method</th>
+                  <th colspan="5" style="text-align:center;border-left:1px solid #e5e7eb;">Video Classification</th>
+                  <th colspan="5" style="text-align:center;border-left:1px solid #e5e7eb;">Video Retrieval</th>
+                </tr>
+                <tr>
+                  <th style="text-align:center;border-left:1px solid #e5e7eb;"><span class="th-sub">UCF</span></th>
+                  <th style="text-align:center;"><span class="th-sub">HMDB</span></th>
+                  <th style="text-align:center;"><span class="th-sub">K700</span></th>
+                  <th style="text-align:center;"><span class="th-sub">BF</span></th>
+                  <th style="text-align:center;"><span class="th-sub">SSv2</span></th>
+                  <th style="text-align:center;border-left:1px solid #e5e7eb;"><span class="th-sub">MSR</span></th>
+                  <th style="text-align:center;"><span class="th-sub">MSVD</span></th>
+                  <th style="text-align:center;"><span class="th-sub">DDMo</span></th>
+                  <th style="text-align:center;"><span class="th-sub">YC2</span></th>
+                  <th style="text-align:center;"><span class="th-sub">VTX</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>VLM2Vec-V2 (multimodal)</td>
+                  <td style="text-align:center;">60.0</td><td style="text-align:center;">40.9</td><td style="text-align:center;">38.0</td><td style="text-align:center;">14.8</td><td style="text-align:center;">42.8</td>
+                  <td style="text-align:center;">28.3</td><td style="text-align:center;">48.1</td><td style="text-align:center;">30.4</td><td style="text-align:center;">10.6</td><td style="text-align:center;">26.5</td>
+                </tr>
+                <tr>
+                  <td>LamRA-Qwen2</td>
+                  <td style="text-align:center;">60.4</td><td style="text-align:center;">40.5</td><td style="text-align:center;">42.3</td><td style="text-align:center;">16.9</td><td style="text-align:center;">36.3</td>
+                  <td style="text-align:center;">22.1</td><td style="text-align:center;">46.1</td><td style="text-align:center;">24.8</td><td style="text-align:center;">9.2</td><td style="text-align:center;">19.1</td>
+                </tr>
+                <tr>
+                  <td>TTE-7B</td>
+                  <td style="text-align:center;">78.6</td><td style="text-align:center;">63.9</td><td style="text-align:center;">55.6</td><td style="text-align:center;">34.2</td><td style="text-align:center;">55.3</td>
+                  <td style="text-align:center;">39.5</td><td style="text-align:center;">59.4</td><td style="text-align:center;">36.3</td><td style="text-align:center;">20.3</td><td style="text-align:center;">32.6</td>
+                </tr>
+                <tr>
+                  <td>Tarsier 2 (base)</td>
+                  <td style="text-align:center;">37.9</td><td style="text-align:center;">17.4</td><td style="text-align:center;">29.6</td><td style="text-align:center;">36.1</td><td style="text-align:center;">15.9</td>
+                  <td style="text-align:center;">9.5</td><td style="text-align:center;">39.8</td><td style="text-align:center;">12.2</td><td style="text-align:center;">3.9</td><td style="text-align:center;">16.6</td>
+                </tr>
+                <tr class="ours-row">
+                  <td>Tarsier 2 + TARA (Ours)</td>
+                  <td style="text-align:center;"><strong>80.3</strong></td><td style="text-align:center;"><strong>69.0</strong></td><td style="text-align:center;"><strong>59.4</strong></td><td style="text-align:center;"><strong>45.6</strong></td><td style="text-align:center;"><strong>76.4</strong></td>
+                  <td style="text-align:center;"><strong>40.7</strong></td><td style="text-align:center;"><strong>82.2</strong></td><td style="text-align:center;"><strong>36.8</strong></td><td style="text-align:center;"><strong>16.7</strong></td><td style="text-align:center;"><strong>53.2</strong></td>
+                </tr>
+                <tr>
+                  <td>Qwen3VL-Embedding</td>
+                  <td style="text-align:center;">94.6</td><td style="text-align:center;">77.5</td><td style="text-align:center;">71.2</td><td style="text-align:center;">67.2</td><td style="text-align:center;">76.9</td>
+                  <td style="text-align:center;">53.8</td><td style="text-align:center;">87.2</td><td style="text-align:center;">56.1</td><td style="text-align:center;">32.8</td><td style="text-align:center;">64.8</td>
+                </tr>
+                <tr style="background:#f0fdf4;">
+                  <td style="color:#166534;font-weight:600;">TARA &oplus; Qwen3VL-Emb. (Ensemble)</td>
+                  <td style="text-align:center;color:#166534;font-weight:700;">94.3</td><td style="text-align:center;color:#166534;font-weight:700;">78.3</td><td style="text-align:center;color:#166534;font-weight:700;">70.0</td><td style="text-align:center;color:#166534;font-weight:700;">68.6</td><td style="text-align:center;color:#166534;font-weight:700;">81.4</td>
+                  <td style="text-align:center;color:#166534;font-weight:700;">54.5</td><td style="text-align:center;color:#166534;font-weight:700;">88.4</td><td style="text-align:center;color:#166534;font-weight:700;">56.1</td><td style="text-align:center;color:#166534;font-weight:700;">32.1</td><td style="text-align:center;color:#166534;font-weight:700;">66.2</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="expandable-section">
+          <button class="expand-btn" onclick="toggleExpand(this)" aria-expanded="false">
+            <span data-show="Show controlled comparison (same base model)" data-hide="Hide controlled comparison (same base model)">Show controlled comparison (same base model)</span>
+            <svg class="icon-svg expand-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <div class="expandable-content">
+            <p class="expand-note">All methods use Qwen2VL-7B as base model. Direct apples-to-apples comparison.</p>
+            <div class="results-table-wrapper">
+              <table class="table is-fullwidth results-table">
+                <thead>
+                  <tr>
+                    <th>Method</th>
+                    <th style="text-align:center;font-size:.75rem;">Fine-tuning modality</th>
+                    <th style="text-align:center;">CiA-SSv2 Chiral</th>
+                    <th style="text-align:center;">RTime T2V</th>
+                    <th style="text-align:center;">RTime V2T</th>
+                    <th style="text-align:center;">CoVR R@1</th>
+                    <th style="text-align:center;font-weight:700;">Avg.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Base (Qwen2VL-7B)</td><td style="text-align:center;font-size:.75rem;">—</td><td style="text-align:center;">60.2</td><td style="text-align:center;">59.9</td><td style="text-align:center;">64.7</td><td style="text-align:center;">15.5</td><td style="text-align:center;">40.0</td></tr>
+                  <tr><td>ArrowRL</td><td style="text-align:center;font-size:.75rem;">video+text</td><td style="text-align:center;">67.5</td><td style="text-align:center;">57.1</td><td style="text-align:center;">68.8</td><td style="text-align:center;">41.8</td><td style="text-align:center;">51.3</td></tr>
+                  <tr><td>CaRe (Stage 2)</td><td style="text-align:center;font-size:.75rem;">video+text</td><td style="text-align:center;">66.4</td><td style="text-align:center;">59.8</td><td style="text-align:center;">69.9</td><td style="text-align:center;">35.6</td><td style="text-align:center;">51.9</td></tr>
+                  <tr><td>LAMRA</td><td style="text-align:center;font-size:.75rem;">image+text</td><td style="text-align:center;">55.3</td><td style="text-align:center;">57.9</td><td style="text-align:center;">63.9</td><td style="text-align:center;">31.5</td><td style="text-align:center;">41.1</td></tr>
+                  <tr><td>VLM2Vec-2.0</td><td style="text-align:center;font-size:.75rem;">video+image+text</td><td style="text-align:center;">58.8</td><td style="text-align:center;">54.3</td><td style="text-align:center;">61.8</td><td style="text-align:center;">42.9</td><td style="text-align:center;">46.9</td></tr>
+                  <tr class="ours-row">
+                    <td>Base + TARA (Ours)</td>
+                    <td style="text-align:center;font-size:.75rem;">text only</td>
+                    <td style="text-align:center;"><strong>72.7</strong></td>
+                    <td style="text-align:center;"><strong>65.9</strong></td>
+                    <td style="text-align:center;"><strong>73.8</strong></td>
+                    <td style="text-align:center;"><strong>44.8</strong></td>
+                    <td style="text-align:center;"><strong>56.8</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ANALYSIS ==================== -->
+    <section class="section hero is-light" id="analysis">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <h2 class="title is-3 section-title">Analysis: Why Does Text-Only Training Work?</h2>
+          <div class="content paper-copy">
+            <p>
+              We study the <strong>modality gap</strong> — the systematic offset between video and text embeddings in the shared embedding space. Despite sharing an LLM backbone, MLLMs exhibit a clear modality gap because video and text tokens arrive through different pathways (vision encoder + MLP projection vs. learned text embeddings). This gap wastes representational capacity and skews cosine similarities, hurting retrieval.
+            </p>
+          </div>
+
+          <figure class="paper-figure">
+            <img src="public/figures/modgap-main.png" alt="Modality gap analysis on MSRVTT: EOL alone does not close gap, text-only fine-tuning reduces it.">
+            <figcaption><strong>Modality gap on MSR-VTT.</strong> EOL prompting alone does not close the gap; text-only TARA fine-tuning substantially reduces ‖Δ<sub>gap</sub>‖ and improves alignment.</figcaption>
+          </figure>
+
+          <figure class="paper-figure">
+            <img src="public/figures/tarsier2-modgap.png" alt="Modality-gap visualization for Tarsier 2 on MSRVTT; TARA reduces gap substantially.">
+            <figcaption><strong>Tarsier 2 modality gap.</strong> TARA reduces ‖Δ<sub>gap</sub>‖ from 0.49 to 0.20 on Tarsier 2.</figcaption>
+          </figure>
+
+          <figure class="paper-figure">
+            <img src="public/figures/video-text-logits.png" alt="Token-logit visualization for video/text embeddings showing more semantically relevant top tokens after TARA.">
+            <figcaption><strong>Token logit analysis.</strong> Top-activated tokens for video and text embeddings before and after TARA — the model learns more semantically coherent representations.</figcaption>
+          </figure>
+
+          <div class="analysis-cards">
+            <div class="analysis-card">
+              <h4>EOL prompt alone is insufficient</h4>
+              <p>While Jiang et al. showed EOL prompts dissolve the modality gap for <em>images</em> with LLaVA-NeXT, we find this does not generalize to <em>video</em>-text pairs for Qwen2VL, InternVL3, Tarsier, and Qwen3VL. The gap persists at ‖Δ<sub>gap</sub>‖ ≈ 0.35–0.68.</p>
+            </div>
+            <div class="analysis-card card-indigo">
+              <h4>Text-only TARA closes the gap</h4>
+              <p>TARA reduces ‖Δ<sub>gap</sub>‖ from 0.49 &rarr; <strong>0.20</strong> for Tarsier 2 via the <em>uniformity pressure</em> of contrastive training: text embeddings spread on the hypersphere, pulling both modality centroids toward the origin and closer to each other.</p>
+            </div>
+          </div>
+
+          <div class="results-block" style="margin-top:1.5rem;">
+            <h3 class="subtitle is-5 table-title">Modality Gap Measurements (‖Δ<sub>gap</sub>‖ &darr;, lower is better)</h3>
+            <div class="results-table-wrapper" style="max-width:500px;margin:0 auto">
+              <table class="table is-fullwidth results-table">
+                <thead>
+                  <tr>
+                    <th>Model</th>
+                    <th style="text-align:center;">No EOL</th>
+                    <th style="text-align:center;">With EOL</th>
+                    <th style="text-align:center;">After TARA</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Qwen2VL-7B</td><td style="text-align:center;">0.39</td><td style="text-align:center;">0.35</td><td style="text-align:center;font-weight:600;color:#4338ca;">0.20</td></tr>
+                  <tr><td>Tarsier 2</td><td style="text-align:center;">0.49</td><td style="text-align:center;">0.51</td><td style="text-align:center;font-weight:600;color:#4338ca;">0.20</td></tr>
+                  <tr><td>InternVL3-8B</td><td style="text-align:center;">0.43</td><td style="text-align:center;">0.68</td><td style="text-align:center;color:#9ca3af;">—</td></tr>
+                  <tr><td>Qwen3VL-8B</td><td style="text-align:center;">0.56</td><td style="text-align:center;">0.62</td><td style="text-align:center;color:#9ca3af;">—</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== BIBTEX ==================== -->
+    <section class="section" id="bibtex">
+      <div class="container is-max-desktop content">
+        <div class="bibtex-header">
+          <h2 class="title is-3 section-title">BibTeX</h2>
+          <button class="copy-bibtex-btn" type="button" onclick="copyBibTeX()">
+            <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 00-2 2v12h2V3h12zm3 4H8a2 2 0 00-2 2v14a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2m0 16H8V7h11z"/></svg>
+            <span class="copy-text">Copy</span>
+          </button>
+        </div>
+        <pre id="bibtex-code"><code>@article{bagad2026tara,
+  title   = {Adapting MLLMs for Nuanced Video Retrieval},
+  author  = {Bagad, Piyush and Zisserman, Andrew},
+  journal = {arXiv preprint arXiv:2512.13511},
+  year    = {2026}
+}</code></pre>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container is-max-desktop">
+      <div class="content has-text-centered">
+        <p>
+          <a href="https://www.robots.ox.ac.uk/~vgg/" target="_blank" rel="noreferrer">Visual Geometry Group</a>
+          &middot;
+          <a href="https://www.ox.ac.uk/" target="_blank" rel="noreferrer">University of Oxford</a>
+        </p>
+        <p style="font-size:.8rem;color:#d1d5db;margin-top:.5rem;">
+          Website template adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noreferrer">Academic Project Page Template</a>.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll to top button
+    window.addEventListener('scroll', function() {
+      var btn = document.getElementById('scrollTopBtn');
+      if (window.scrollY > 400) btn.classList.add('visible');
+      else btn.classList.remove('visible');
+    });
+
+    // Expandable sections
+    function toggleExpand(btn) {
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', !expanded);
+      var content = btn.nextElementSibling;
+      var arrow = btn.querySelector('.expand-arrow');
+      var label = btn.querySelector('span[data-show]');
+      if (expanded) {
+        content.classList.remove('open');
+        arrow.classList.remove('open');
+        if (label) label.textContent = label.dataset.show;
+      } else {
+        content.classList.add('open');
+        arrow.classList.add('open');
+        if (label) label.textContent = label.dataset.hide;
+      }
+    }
+
+    // Copy BibTeX
+    function copyBibTeX() {
+      var code = document.querySelector('#bibtex-code code').textContent;
+      navigator.clipboard.writeText(code).then(function() {
+        var btn = document.querySelector('.copy-bibtex-btn .copy-text');
+        btn.textContent = 'Copied!';
+        setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+      });
+    }
+  </script>
+</body>
 </html>
